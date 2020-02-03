@@ -69,10 +69,8 @@ $(function () {
 		document.querySelector('.result').style.display = 'block';
 		document.querySelector('.result_sum').textContent = `Ваш результат - ${sum} очков`;
 
-		removeDuckFly(duck1);
-		duck1.classList.remove('duck_fly');
-		removeDuckFly(duck2);
-		duck2.classList.remove('duck_fly');
+		duck1.className = 'duck gs';
+		duck2.className = 'duck gs';
 
 		restart.style.display = 'block';
 	}
@@ -82,10 +80,8 @@ $(function () {
 		numberRound++;
 		speed += 100;
 		document.querySelector('.timer').textContent = ``;
-		removeDuckFly(duck1);
-		duck1.classList.remove('duck_fly');
-		removeDuckFly(duck2);
-		duck2.classList.remove('duck_fly');
+		duck1.className = 'duck gs';
+		duck2.className = 'duck gs';
 		if (numberRound <= ROUNDS) {
 			alert(message);
 			duckFly(duck1, speed);
@@ -117,11 +113,11 @@ $(function () {
 
 		duck.style.left = `${leftEnd}px`;
 		duck.style.top = `${topEnd}px`;
-		duck.style['transition-duration'] = `.001s`;
+		duck.style['transition-duration'] = `.001s`;		
 
 		duck.addEventListener('transitionend', () => {
 
-			removeDuckFly(duck);
+			duck.className = 'duck gs duck_fly';
 
 			let leftStart = getComputedStyle(duck).left.slice(0,-2);
 			let topStart = getComputedStyle(duck).top.slice(0,-2);
@@ -133,16 +129,16 @@ $(function () {
 			let heightDiff = Math.ceil(heightSky/4);
 
 			if ( leftDiff >= 0 && Math.abs(topDiff) <= heightDiff ) {
-				duck.classList.add('duck_fly_right');
+				duck.classList.add('duck_fly_right');				
 			};
 			if ( leftDiff >= 0 && Math.abs(topDiff) > heightDiff ) {
-				duck.classList.add('duck_fly_top_right');
+				duck.classList.add('duck_fly_top_right');				
 			};
 			if ( leftDiff < 0 && Math.abs(topDiff) <= heightDiff ) {
-				duck.classList.add('duck_fly_left');
+				duck.classList.add('duck_fly_left');				
 			};
 			if ( leftDiff < 0 && Math.abs(topDiff) > heightDiff ) {
-				duck.classList.add('duck_fly_top_left');
+				duck.classList.add('duck_fly_top_left');				
 			};
 
 			// Утка летает с постоянной скоростью speed
@@ -158,25 +154,16 @@ $(function () {
 
 	// Попадание в утку
 	duck1.addEventListener('click', () => {
-		removeDuckFly(duck1);
-		duck1.classList.remove('duck_fly');
+		duck1.className = 'duck gs';
 		sum += SUM_ROUNDS;
 		document.querySelector('.sum').textContent = `СЧЕТ: ${sum}`;
 	});
 	duck2.addEventListener('click', () => {
-		removeDuckFly(duck2);
-		duck2.classList.remove('duck_fly');
+		duck2.className = 'duck gs';
 		sum += SUM_ROUNDS;
 		document.querySelector('.sum').textContent = `СЧЕТ: ${sum}`;
 	});
-
-	function removeDuckFly(duck) {
-		duck.classList.remove('duck_fly_right');
-		duck.classList.remove('duck_fly_top_right');
-		duck.classList.remove('duck_fly_left');
-		duck.classList.remove('duck_fly_top_left');
-	};
-
+	
 	// Случайное целое число в заданном интервале
 	function getRandomInt(min, max) {
 		min = Math.ceil(min);
