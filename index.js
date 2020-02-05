@@ -13,6 +13,13 @@ $(function () {
 	let foot = document.querySelector('.foot');
 	let start = document.querySelector('#start');
 	let restart = document.querySelector('#restart');
+	let message_block = document.querySelector('.message_block');
+	let message_btn = document.querySelector('#message_btn');
+	let message_text = document.querySelector('.message_text');
+	let sum_text = document.querySelector('.sum_text');
+	let timer_text = document.querySelector('.timer_text');
+	let result_block = document.querySelector('.result_block');
+	let result_sum = document.querySelector('.result_sum');
 
 	// Создание уток
 	for (let i = 1; i < NUM_DUCKS; i++) {
@@ -26,14 +33,16 @@ $(function () {
 		ducks[i].addEventListener('click', () => {
 			ducks[i].className = 'duck gs';
 			sum += SUM_ROUNDS;
-			document.querySelector('.sum').textContent = `СЧЕТ: ${sum}`;
+			sum_text.textContent = `СЧЕТ: ${sum}`;
 		});
 	}
 
-	// Нажатие на кнопку "СТАРТ"
+	// Нажать на кнопку "СТАРТ"
 	start.addEventListener('click', () => {
-		$('#start').fadeOut(1000);
+
+		start.style.display = 'none';
 		game();
+
 	});
 
 	// Перезагрузить игру
@@ -43,15 +52,20 @@ $(function () {
 
 	// Создание утки
 	function duckCreate () {
+
 		let div = document.createElement('DIV');
 		div.className = 'duck gs';
-		wrapper.insertBefore(div, start);		
+		wrapper.insertBefore(div, start);
+
 	}
 
 	// Игра
 	function game () {
+		
 		dogWalkJump(dog);
+
 		dog.addEventListener('animationend', () => {
+			foot.style['z-index'] = `20`;
 			for (let i = 0; i < ducks.length; i++) {
 				duckFly(ducks[i], speed);
 			};	
@@ -70,77 +84,96 @@ $(function () {
 		}
 
 		function checkClass (ducks) {
+
 			let check = false;
+
 			for (let i = 0; i < NUM_DUCKS; i++) {
 				if (ducks[i].classList.contains('duck_fly')) {
 					return true;
 				}
 			}
-		}	
 
-		if (!checkClass(document.querySelectorAll('.duck'))) {
+		}
+
+		if ( !checkClass(ducks) ) {
+
 			message = `ВСЕ УТКИ УБИТЫ. СЛЕДУЮЩИЙ РАУНД ${numberRound + 1}`;
 			nextRound(message);
-			run(TIME_ROUNDS);
+			
 		} else {
+
 			if (timer > 0) {
-				document.querySelector('.timer').innerHTML = `РАУНД ${numberRound} <br> ОСТАЛОСЬ ${timer} СЕКУНД`;
+				timer_text.innerHTML = `РАУНД ${numberRound} <br> ОСТАЛОСЬ ${timer} СЕКУНД`;
 				setTimeout(run, 1000, --timer);
 			} else {
 				message = `ВЫ НЕ ПОПАЛИ. СЛЕДУЮЩИЙ РАУНД ${numberRound + 1}`;
 				nextRound(message);
-				run(TIME_ROUNDS);
 			}
 		}
 	}
 
 	// Окончание игры, результат
 	function result () {
-		document.querySelector('.timer').textContent = ``;
-		document.querySelector('.sum').textContent = ``;
-		document.querySelector('.result').style.display = 'block';
-		document.querySelector('.result_sum').textContent = `Ваш результат - ${sum} очков`;
-	
+
 		for (let i = 0; i < ducks.length; i++) {
 			ducks[i].className = 'duck gs';
 		}
 
-		restart.style.display = 'block';
+		timer_text.textContent = ``;
+		sum_text.textContent = ``;
+		result_block.style.display = 'block';
+		result_sum.textContent = `ВАШ РЕЗУЛЬТАТ - ${sum} ОЧКОВ`;
+
 	}
 
 	// Следующий раунд
 	function nextRound (message) {
+
 		numberRound++;
 		speed += 100;
-		document.querySelector('.timer').textContent = ``;
 		
 		for (let i = 0; i < NUM_DUCKS; i++) {
-			document.querySelectorAll('.duck').className = 'duck gs';
+			ducks[i].className = 'duck gs';
 		}
 
 		if (numberRound <= ROUNDS) {
-			alert(message);
+			message_text.textContent = message;
+			message_block.style.display = 'block';
+			timer_text.textContent = ``;
+		}
+
+		message_btn.addEventListener( 'click', () => {
+
+			message_block.style.display = 'none';
+			message_text.textContent = '';
+
 			for (let i = 0; i < ducks.length; i++) {
 				duckFly(ducks[i], speed);
 			};
-		}
+
+			run(TIME_ROUNDS);
+
+		})
+		
 	}
 
 	// Анимация собаки
 	function dogWalkJump (dog) {
+
 		dog.classList.add('dog_walk');
+
 		dog.addEventListener('transitionend', () => {
 			dog.classList.remove('dog_walk');
 		 	dog.classList.add('dog_jump');
 		});
-	};	
+
+	};
 
 	// Полет утки
 	function duckFly (duck, speed) {
 
-		foot.style['z-index'] = `10`;
-
 		duck.classList.add('duck_fly');
+		duck.style['z-index'] = `10`;
 
 		let heightSky = wrapper.clientHeight - foot.clientHeight - 70;
 		let widthSky = wrapper.clientWidth - 104;

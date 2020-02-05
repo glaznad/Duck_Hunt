@@ -92,6 +92,7 @@ html, body { height: 100%; }
   bottom: 226px;
   left: 0;
   display: none;
+  z-index: 10;
 }
 .duck_fly {
   display: block !important;
@@ -189,31 +190,30 @@ html, body { height: 100%; }
     background-position: -218px -176px;
   }
 }
-#start, #restart {
+#start, #restart, #message_btn {
+  margin: auto;
   width: 200px;
   height: 50px;
   background-color: #e6ef28;
   border: 2px solid #827013;
   border-radius: 10px;
   color: #827013;
+  font-weight: bold;
+  display: block;
 }
 #start {
   position: absolute;
   top: 0;
   right: 0;
   bottom: 0;
-  left: 0;
-  margin: auto;
+  left: 0; 
   font-size: 30px;
-  display: block;
-  z-index: 30;
+  z-index: 40;
 }
-#restart {
-  margin: auto;
+#restart, #message_btn {
   font-size: 20px;
-  display: none;
 }
-.timer {
+.timer_text {
   position: absolute;
   right: 0;
   bottom: 0;
@@ -222,9 +222,9 @@ html, body { height: 100%; }
   text-align: center;
   color: #e6ef28;
   font-size: 20px;
-  z-index: 20;
+  z-index: 30;
 }
-.sum {
+.sum_text {
   position: absolute;
   right: 0;
   top: 0;
@@ -234,9 +234,9 @@ html, body { height: 100%; }
   text-align: center;
   color: #e6ef28;
   font-size: 20px;
-  z-index: 20;
+  z-index: 5;
 }
-.result {
+.result_block, .message_block {
   position: relative;
   top: 0;
   right: 0;
@@ -245,16 +245,16 @@ html, body { height: 100%; }
   margin: auto;
   height: 200px;
   width: 100%;
-  text-align: center;щ
+  text-align: center;
   display: none;
-  z-index: 20;
+  z-index: 40;
 }
-.result_sum {
+.result_sum, .message_text {
   margin: auto;
   padding: 15px 0;
   width: 400px;
   text-align: center;
   color: #e6ef28;
-  font-size: 30px;
+  font-size: 26px;
   font-weight: bold;
-}собака выпригивает ис куста
+}
