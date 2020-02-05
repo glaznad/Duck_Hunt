@@ -35,7 +35,7 @@ html, body { height: 100%; }
 }
 .dog_walk {
   animation-name: dog-walk;
-  animation-duration: .6s;
+  animation-duration: .5s;
   animation-iteration-count: infinite;
   animation-timing-function: steps(1, end);
   animation-delay: 0s;
@@ -47,7 +47,7 @@ html, body { height: 100%; }
   width: 161px;
   height: 143px;
   animation-name: dog-jump;
-  animation-duration: 1s;
+  animation-duration: 0.7s;
   animation-iteration-count: 1;
   animation-timing-function: steps(1, end);
   animation-delay: 0s;
@@ -91,8 +91,7 @@ html, body { height: 100%; }
   position: absolute;
   bottom: 226px;
   left: 0;
-  display: none;
-  z-index: 10;
+  display: none;  
 }
 .duck_fly {
   display: block !important;

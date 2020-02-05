@@ -30,17 +30,19 @@ $(function () {
 
 	// Попадание в уток
 	for (let i = 0; i < ducks.length; i++) {
+
 		ducks[i].addEventListener('click', () => {
 			ducks[i].className = 'duck gs';
 			sum += SUM_ROUNDS;
 			sum_text.textContent = `СЧЕТ: ${sum}`;
 		});
+
 	}
 
 	// Нажать на кнопку "СТАРТ"
 	start.addEventListener('click', () => {
 
-		start.style.display = 'none';
+		hideBlock(start);
 		game();
 
 	});
@@ -65,11 +67,13 @@ $(function () {
 		dogWalkJump(dog);
 
 		dog.addEventListener('animationend', () => {
+
 			foot.style['z-index'] = `20`;
 			for (let i = 0; i < ducks.length; i++) {
 				duckFly(ducks[i], speed);
 			};	
 			run(TIME_ROUNDS);
+
 		});
 	};
 
@@ -106,7 +110,7 @@ $(function () {
 				timer_text.innerHTML = `РАУНД ${numberRound} <br> ОСТАЛОСЬ ${timer} СЕКУНД`;
 				setTimeout(run, 1000, --timer);
 			} else {
-				message = `ВЫ НЕ ПОПАЛИ. СЛЕДУЮЩИЙ РАУНД ${numberRound + 1}`;
+				message = `НЕ ВСЕ УТКИ УБИТЫ. СЛЕДУЮЩИЙ РАУНД ${numberRound + 1}`;
 				nextRound(message);
 			}
 		}
@@ -130,7 +134,7 @@ $(function () {
 	function nextRound (message) {
 
 		numberRound++;
-		speed += 100;
+		speed += 200;
 		
 		for (let i = 0; i < NUM_DUCKS; i++) {
 			ducks[i].className = 'duck gs';
@@ -144,8 +148,7 @@ $(function () {
 
 		message_btn.addEventListener( 'click', () => {
 
-			message_block.style.display = 'none';
-			message_text.textContent = '';
+			hideBlock(message_block);
 
 			for (let i = 0; i < ducks.length; i++) {
 				duckFly(ducks[i], speed);
@@ -227,6 +230,21 @@ $(function () {
 		min = Math.ceil(min);
 		max = Math.floor(max);
 		return Math.floor(Math.random() * (max - min)) + min;
-	};
+	}
+
+	// Постепенное исчезновение кнопки
+	function hideBlock (elem) {
+  
+		let opacity = 1;	  
+		let timer = setInterval(function() {
+			elem.style.opacity = opacity;
+			opacity -= opacity * 0.1;
+			if(opacity <= 0.1) {
+				clearInterval(timer);
+				elem.style.cssText = 'display: none;';
+			}
+		}, 30);
+
+	}
 
 });
