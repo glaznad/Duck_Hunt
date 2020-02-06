@@ -1,4 +1,4 @@
-$(function () {
+document.addEventListener('DOMContentLoaded', () => {
 
 	const ROUNDS = 3; // число раундов
 	const TIME_ROUNDS = 15; // время одного раунда
@@ -6,7 +6,7 @@ $(function () {
 	const NUM_DUCKS = 3; // число уток
 	let sum = 0;
 	let numberRound = 1;
-	let speed = 200;
+	let speed = 300;
 
 	let dog = document.querySelector('.dog');
 	let wrapper = document.querySelector('.wrapper');
@@ -21,6 +21,10 @@ $(function () {
 	let result_block = document.querySelector('.result_block');
 	let result_sum = document.querySelector('.result_sum');
 
+	let audio_duck = new Audio();
+	let audio_gun = new Audio();
+	let audio_dog = new Audio();
+
 	// Создание уток
 	for (let i = 1; i < NUM_DUCKS; i++) {
 		duckCreate();
@@ -30,14 +34,26 @@ $(function () {
 
 	// Попадание в уток
 	for (let i = 0; i < ducks.length; i++) {
+		ducks[i].addEventListener('click', (ev) => {
 
-		ducks[i].addEventListener('click', () => {
 			ducks[i].className = 'duck gs';
 			sum += SUM_ROUNDS;
 			sum_text.textContent = `СЧЕТ: ${sum}`;
-		});
+			//ev.stopPropagation();
+			audio_duck.src = 'assets/sounds/dead-duck-falls.mp3';
+			audio_duck.loop = false;
 
+		});
 	}
+
+	// Выстрел
+	wrapper.addEventListener('click', (ev) => {
+
+		if (ev.target.classList.contains('wrapper') || ev.target.classList.contains('sum_text') ||  ev.target.classList.contains('duck')) {
+			audio_gun.src = 'assets/sounds/gun-shot.mp3';
+		}
+
+	});
 
 	// Нажать на кнопку "СТАРТ"
 	start.addEventListener('click', () => {
@@ -67,8 +83,12 @@ $(function () {
 		dogWalkJump(dog);
 
 		dog.addEventListener('animationend', () => {
-
+			
 			foot.style['z-index'] = `20`;
+			audio_duck.src = 'assets/sounds/duck-quack.mp3';
+			audio_duck.autoplay = true;
+  			audio_duck.loop = true;
+  			audio_gun.autoplay = true;
 			for (let i = 0; i < ducks.length; i++) {
 				duckFly(ducks[i], speed);
 			};	
@@ -125,7 +145,7 @@ $(function () {
 
 		timer_text.textContent = ``;
 		sum_text.textContent = ``;
-		result_block.style.display = 'block';
+		result_block.style.display = 'flex';
 		result_sum.textContent = `ВАШ РЕЗУЛЬТАТ - ${sum} ОЧКОВ`;
 
 	}
@@ -135,6 +155,7 @@ $(function () {
 
 		numberRound++;
 		speed += 200;
+		audio_duck.pause();
 		
 		for (let i = 0; i < NUM_DUCKS; i++) {
 			ducks[i].className = 'duck gs';
@@ -142,13 +163,16 @@ $(function () {
 
 		if (numberRound <= ROUNDS) {
 			message_text.textContent = message;
-			message_block.style.display = 'block';
+			message_block.style.display = 'flex';
 			timer_text.textContent = ``;
 		}
 
 		message_btn.addEventListener( 'click', () => {
 
 			hideBlock(message_block);
+
+			audio_duck.src = 'assets/sounds/duck-quack.mp3';
+			audio_duck.loop = true;
 
 			for (let i = 0; i < ducks.length; i++) {
 				duckFly(ducks[i], speed);
@@ -164,8 +188,12 @@ $(function () {
 	function dogWalkJump (dog) {
 
 		dog.classList.add('dog_walk');
+		audio_dog.autoplay = true;
+		audio_dog.src = 'assets/sounds/hunt-intro.mp3';
 
 		dog.addEventListener('transitionend', () => {
+			audio_dog.pause();
+			audio_dog.src = 'assets/sounds/dog-bark.mp3';
 			dog.classList.remove('dog_walk');
 		 	dog.classList.add('dog_jump');
 		});
@@ -223,13 +251,15 @@ $(function () {
 			duck.style['transition-duration'] = `${delay}s`;
 
 		});
-	};	
+	};
 	
 	// Случайное целое число в заданном интервале
 	function getRandomInt(min, max) {
+
 		min = Math.ceil(min);
 		max = Math.floor(max);
 		return Math.floor(Math.random() * (max - min)) + min;
+
 	}
 
 	// Постепенное исчезновение кнопки
